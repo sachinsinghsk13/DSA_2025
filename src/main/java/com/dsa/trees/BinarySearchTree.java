@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class BinarySearchTree {
-  private Node root;
+  public Node root;
 
   public void insert(int data) {
     root = insertInternal(root, data);
