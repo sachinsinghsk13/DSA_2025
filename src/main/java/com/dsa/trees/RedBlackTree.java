@@ -116,7 +116,7 @@ public class RedBlackTree {
 
   private RedBlackNode findLargestNode(RedBlackNode node) {
     if (node != null && node.right != null) {
-      return node.right;
+      return findLargestNode(node.right);
     }
     return node;
   }
