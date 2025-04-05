@@ -7,9 +7,10 @@ import java.util.List;
 public class Driver {
   public static void main(String[] args) {
     RedBlackTree t = new RedBlackTree();
-    for (Integer i : List.of(26, 25, 35, 18, 22, 61, 95)) {
+    for (Integer i : List.of(30, 20, 40)) {
       t.insert(i);
     }
     System.out.println(t);
+    t.delete(20);
   }
 }
