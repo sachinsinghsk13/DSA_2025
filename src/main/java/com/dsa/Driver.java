@@ -2,6 +2,7 @@ package com.dsa;
 
 import com.dsa.heaps.ArrayBinaryHeap;
 import com.dsa.heaps.BinaryHeap;
+import com.dsa.heaps.BinomialHeap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,25 +10,15 @@ import java.util.Random;
 
 public class Driver {
 
-  public static List<Integer> generateRandomNumbers(int count) {
-    List<Integer> randomNumbers = new ArrayList<>();
-    Random random = new Random();
-
-    for (int i = 0; i < count; i++) {
-      int num = random.nextInt(1000) + 1; // Generates number between 1 and 1000
-      randomNumbers.add(num);
-    }
-
-    return randomNumbers;
-  }
   public static void main(String[] args) {
-    BinaryHeap heap = new ArrayBinaryHeap(200);
-    for (Integer i : generateRandomNumbers(200)) {
-      heap.insert(i);
+    BinomialHeap h = new BinomialHeap();
+    for (Integer i : List.of(30, 23, 45, 67, 12, 34, 75, 59, 25, 64, 69, 93, 2, 1)) {
+      h.insert(i);
     }
+    h.deleteKey(2);
+    h.deleteKey(1);
+    System.out.println(h.findMin());
 
-    while (!heap.isEmpty()) {
-      System.out.print(heap.remove() + " ");
-    }
+
   }
 }

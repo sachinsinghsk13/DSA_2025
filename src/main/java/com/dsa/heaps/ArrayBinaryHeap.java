@@ -14,7 +14,7 @@ public class ArrayBinaryHeap implements BinaryHeap {
     if (size < MAX) {
       heap[size] = data;
       int curr = size++;
-      int parent = curr / 2;
+      int parent = (curr - 1) / 2;
       while (curr != 0) {
           if (heap[curr] > heap[parent]) {
             int temp = heap[curr];
