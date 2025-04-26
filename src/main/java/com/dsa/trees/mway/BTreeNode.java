@@ -1,20 +1,15 @@
 package com.dsa.trees.mway;
 
 public class BTreeNode {
-
-  int[] keys;
-  BTreeNode[] children;
-  BTreeNode parent;
-  boolean isLeafNode;
-  int totalKeys;
-  final int order;
+  public int[] keys;
+  public BTreeNode[] children;
+  public BTreeNode parent;
+  public boolean leaf = true;
+  public int size;
 
   public BTreeNode(int order) {
-    this.order = order;
-    keys = new int[this.order];
-    children = new BTreeNode[this.order + 1];
-    isLeafNode = true; // new node is always leaf
+    this.children = new BTreeNode[order];
+    this.keys = new int[order - 1];
+    this.size = 0;
   }
-
-
 }

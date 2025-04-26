@@ -1,126 +1,79 @@
 package com.dsa.trees.mway;
 
 public class BTree {
-
   private BTreeNode root;
-  private final int order;
+  private final int ORDER; // maximum ORDER children and maximum ORDER - 1 keys except root node
+  private final int MIN_ORDER; // minimum MIN_ORDER children and MIN_ORDER - 1 keys except the root node
 
   public BTree(int order) {
-    this.order = order;
-    this.root = new BTreeNode(order);
+    this.ORDER = order;
+    this.MIN_ORDER = Math.ceilDiv(ORDER, 2);
+    this.root = new BTreeNode(ORDER);
   }
 
   public void insert(int key) {
     insertInternal(root, key);
   }
 
-  private void swap(int[] array, int i, int j) {
-    int temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-  }
-
   private void insertInternal(BTreeNode node, int key) {
-    if (node.isLeafNode && node.totalKeys < node.order) { // is this node a leaf node and has space available for new key
-      int i = node.totalKeys;
-      while (i > 0 && key < node.keys[i - 1]) {
-        swap(node.keys, i, i - 1);
-        i--;
+
+    if (node.leaf && node.size < ORDER - 1) { // target node is leaf and has available space for new key.
+      int insertIndex = node.size;
+      while (insertIndex > 0 && key < node.keys[insertIndex - 1]) {
+        swapKey(node.keys, insertIndex, insertIndex - 1);
+        insertIndex--;
       }
-      node.keys[i] = key;
-      node.totalKeys++;
-    } else if (node.isLeafNode) { // this is a leaf node but no space is available for new key so split this node.
-      // split the node.
-      splitNode(node, key);
-    } else {
+      node.keys[insertIndex] = key;
+      node.size++;
+    } else if (node.leaf && node.parent == null) { // root node became full.
+
+      // add the new key along with all the keys of nodes in ascending order.
+      int[] temp = new int[ORDER];
+      System.arraycopy(node.keys, 0, temp, 0, node.size);
+      int placeAt = node.size;
+      while (placeAt > 0 && key < temp[placeAt - 1]) {
+        swapKey(temp, placeAt, placeAt - 1);
+        placeAt--;
+      }
+      temp[placeAt] = key;
+
+      int mid = temp.length / 2;
+      node.size = mid;
+      BTreeNode rightNode = new BTreeNode(ORDER);
+
+      for (int i = mid + 1, j = 0; i < temp.length; i++, j++) {
+        rightNode.keys[j] = temp[i];
+        rightNode.size++;
+      }
+
+      BTreeNode newRoot = new BTreeNode(ORDER);
+      newRoot.keys[0] = temp[mid];
+      newRoot.children[0] = node;
+      newRoot.children[1] = rightNode;
+      newRoot.leaf = false;
+      node.parent = newRoot;
+      rightNode.parent = newRoot;
+
+    } else if (node.leaf) {
+
+    } else { // current node is an internal node. navigate to the appropriate leaf node.
       int i = 0;
-      while (i < node.totalKeys) {
-        if (key < node.keys[i]) {
+      while (i < node.size) {
+        if (key < node.keys[i])
           break;
-        }
         i++;
       }
       insertInternal(node.children[i], key);
     }
   }
-
-
-  // splits the given full node and merges with parent
-  private BTreeNode splitNode(BTreeNode node, int key) {
-    // allocate a temporary array for holding the extra key
-    int[] temp = new int[node.order + 1];
-
-    // copy all keys from node to temp array
-    if (node.totalKeys >= 0) System.arraycopy(node.keys, 0, temp, 0, node.totalKeys);
-
-    // place the extra key in its correct position in sorted order
-    int i = node.totalKeys;
-    while (i > 0 && key < temp[i - 1]) {
-      swap(temp, i , i - 1);
-      i--;
-    }
-    temp[i] = key;
-
-    // Find the middle key
-    int mid = temp.length / 2; // take the floor value of division
-    int midKey = temp[mid];
-
-    /*
-    * Now split the node from mid the index.
-    * Left Node:
-    *    total keys = value of mid.
-    *     index range = 0 to mid - 1
-    * Right:
-    *     total keys = order of node - (mid + 1)
-    *     index range = mid + 1 to order - 1.
-    *
-    * */
-
-    // for left Node
-    node.totalKeys = mid;
-    System.arraycopy(temp, 0, node.keys, 0, mid);
-    // for right node
-    BTreeNode rightNode = new BTreeNode(order);
-    rightNode.totalKeys = order - (mid + 1);
-
-    // move elements to right node
-    for(int p = mid + 1, q = 0; p < order; p++, q++) {
-      rightNode.keys[q] = temp[p];
-    }
-
-    /*
-     * Now we have node (left node), rightNode and midKey which we have to push to the parent node.
-     */
-
-    if (node.parent == null) { // if this is the root node.
-      BTreeNode newRoot = new BTreeNode(order);
-      newRoot.keys[0] = midKey;
-      newRoot.children[0] = node;
-      newRoot.children[1] = rightNode;
-      newRoot.totalKeys = 1;
-      newRoot.isLeafNode = false;
-
-      node.parent = newRoot;
-      rightNode.parent = newRoot;
-
-      this.root = newRoot;
-      return newRoot;
-    } else if (node.parent.totalKeys < order) {
-      int j = node.parent.totalKeys;
-      while (j > 0 && midKey < node.parent.keys[j - 1]) {
-        swap(node.parent.keys, i , i - 1);
-        j--;
-      }
-      node.parent.keys[j] = midKey;
-      node.totalKeys++;
-      node.children[j] = node;
-      node.children[j + 1] = rightNode;
-      rightNode.parent = node.parent;
-      return key < midKey ? node : rightNode;
-    } else {
-      BTreeNode parent = splitNode(node.parent, midKey);
-      // look for the midKey in parent.keys and insert left and right child to that key
-      return key < midKey ? node : rightNode;
-    }
+  // target node is leaf but no space available for new key.
+  // swaps the values present at two different indexes.
+  private void swapKey(int[] array, int src, int dest) {
+    if (src == dest) return;
+    int temp = array[dest];
+    array[dest]  = array[src];
+    array[src] = temp;
   }
+
+
 }
