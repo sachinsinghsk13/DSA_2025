@@ -53,7 +53,7 @@ public class BTree {
       newRoot.leaf = false;
       node.parent = newRoot;
       rightNode.parent = newRoot;
-
+      this.root = newRoot;
     } else if (node.leaf) {
 
     } else { // current node is an internal node. navigate to the appropriate leaf node.

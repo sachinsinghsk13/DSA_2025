@@ -12,4 +12,9 @@ public class BTreeNode {
     this.keys = new int[order - 1];
     this.size = 0;
   }
+
+  public boolean isFull() {
+    return size == keys.length;
+  }
+
 }
