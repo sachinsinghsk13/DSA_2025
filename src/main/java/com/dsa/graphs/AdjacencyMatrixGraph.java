@@ -1,11 +1,15 @@
 package com.dsa.graphs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class MatrixGraph extends AbstractGraph {
+public class AdjacencyMatrixGraph extends AbstractGraph {
   private final int[][] adjacencyMatrix;
 
-  public MatrixGraph(int totalVertices, boolean isDirected) {
+  public AdjacencyMatrixGraph(int totalVertices, boolean isDirected) {
     super(totalVertices, isDirected);
     adjacencyMatrix = new int[totalVertices][totalVertices];
   }
@@ -41,6 +45,11 @@ public class MatrixGraph extends AbstractGraph {
   @Override
   public int[] getNeighbourVertices(int vertex) {
     if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Invalid Vertex");
-    return Arrays.copyOf(adjacencyMatrix[vertex], totalVertices);
+    List<Integer> neighbours = new ArrayList<>();
+    for (int i = 0; i < totalVertices; i++) {
+      if (adjacencyMatrix[vertex][i] == 1)
+        neighbours.add(i);
+    }
+    return neighbours.stream().mapToInt(Integer::intValue).toArray();
   }
 }
