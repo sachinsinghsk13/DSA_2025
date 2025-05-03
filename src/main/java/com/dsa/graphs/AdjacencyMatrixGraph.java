@@ -2,6 +2,7 @@ package com.dsa.graphs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AdjacencyMatrixGraph extends AbstractGraph implements WeightedGraph {
   private final int[][] weightMatrix;
@@ -89,9 +90,9 @@ public class AdjacencyMatrixGraph extends AbstractGraph implements WeightedGraph
   }
 
   @Override
-  public WeightedEdge getWeightedEdge(int src, int dest) {
+  public Optional<WeightedEdge> getWeightedEdge(int src, int dest) {
     if (hasEdge(src, dest))
-        return new WeightedEdge(src, dest, weightMatrix[src][dest]);
-    return null;
+        return Optional.of(new WeightedEdge(src, dest, weightMatrix[src][dest]));
+    return Optional.empty();
   }
 }
