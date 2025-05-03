@@ -21,7 +21,7 @@ public class TopologicalSort {
     while (!q.isEmpty()) {
       Integer vertex = q.poll();
       result.add(vertex);
-      for (int n : g.getNeighbourVertices(vertex)) {
+      for (int n : g.getNeighbourNodes(vertex)) {
         indegree[n] = indegree[n] - 1;
         if (indegree[n] == 0)
           q.add(n);

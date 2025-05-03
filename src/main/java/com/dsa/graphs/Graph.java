@@ -6,7 +6,7 @@ public interface Graph {
     boolean hasEdge(int src, int dest);
     void removeEdge(int src, int dest);
     boolean isDirected();
-    int[] getNeighbourVertices(int vertex);
+    int[] getNeighbourNodes(int vertex);
     int[] getInEdges(int vertex);
     int[] getOutEdges(int vertex);
 }

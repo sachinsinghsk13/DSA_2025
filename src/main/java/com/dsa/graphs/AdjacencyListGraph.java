@@ -47,19 +47,19 @@ public class AdjacencyListGraph extends AbstractGraph {
 
 
   @Override
-  public int[] getNeighbourVertices(int vertex) {
+  public int[] getNeighbourNodes(int vertex) {
     if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Vertex not found in graph.");
     return adjacencyList.get(vertex).stream().mapToInt(Integer::intValue).toArray();
   }
 
   @Override
   public int[] getInEdges(int vertex) {
-    return IntStream.range(0, totalVertices).filter(i -> adjacencyList.get(i).contains(vertex)).toArray();
+    return IntStream.range(0, totalNodes).filter(i -> adjacencyList.get(i).contains(vertex)).toArray();
   }
 
   @Override
   public int[] getOutEdges(int vertex) {
-    return getNeighbourVertices(vertex);
+    return getNeighbourNodes(vertex);
   }
 
 }

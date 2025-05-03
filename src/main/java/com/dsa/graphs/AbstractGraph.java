@@ -2,16 +2,16 @@ package com.dsa.graphs;
 
 public abstract class AbstractGraph implements Graph {
   protected final boolean directed;
-  protected final int totalVertices;
+  protected final int totalNodes;
 
-  public AbstractGraph(int totalVertices, boolean isDirected) {
+  public AbstractGraph(int totalNodes, boolean isDirected) {
     this.directed = isDirected;
-    this.totalVertices = totalVertices;
+    this.totalNodes = totalNodes;
   }
 
   @Override
   public int totalVertices() {
-    return totalVertices;
+    return totalNodes;
   }
 
   @Override
@@ -25,6 +25,6 @@ public abstract class AbstractGraph implements Graph {
   }
 
   protected boolean isInvalidVertex(int v) {
-    return v < 0 || v >= totalVertices;
+    return v < 0 || v >= totalNodes;
   }
 }

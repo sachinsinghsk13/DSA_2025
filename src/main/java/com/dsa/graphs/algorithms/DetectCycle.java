@@ -15,7 +15,7 @@ public class DetectCycle {
     visited[0] = true;
     while (!q.isEmpty()) {
       Integer[] pair = q.poll();
-      for (int n : g.getNeighbourVertices(pair[0])) {
+      for (int n : g.getNeighbourNodes(pair[0])) {
         if (visited[n] && n != pair[1])
           return true;
         else if (!visited[n]) {
@@ -35,7 +35,7 @@ public class DetectCycle {
     visited[0] = true;
     while (!s.isEmpty()) {
       Integer[] pair = s.pop();
-      for (int n : g.getNeighbourVertices(pair[0])) {
+      for (int n : g.getNeighbourNodes(pair[0])) {
         if (visited[n] && n != pair[1])
           return true;
         else if (!visited[n]) {
@@ -57,7 +57,7 @@ public class DetectCycle {
     recurStack[0] = true;
     while (!s.isEmpty()) {
       Integer vertex = s.pop();
-      for (int i : g.getNeighbourVertices(vertex)) {
+      for (int i : g.getNeighbourNodes(vertex)) {
         if (visited[i] && recurStack[i]) return true;
         else if (!visited[i]) {
           s.push(i);

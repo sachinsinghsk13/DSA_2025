@@ -1,53 +1,48 @@
 package com.dsa.graphs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-public class AdjacencyMatrixGraph extends AbstractGraph {
-  private final int[][] adjacencyMatrix;
-
-  public AdjacencyMatrixGraph(int totalVertices, boolean isDirected) {
-    super(totalVertices, isDirected);
-    adjacencyMatrix = new int[totalVertices][totalVertices];
+public class AdjacencyMatrixGraph extends AbstractGraph implements WeightedGraph {
+  private final int[][] weightMatrix;
+  private final boolean[][] edgeExistenceMatrix;
+  private static final int DEFAULT_WEIGHT = 1;
+  public AdjacencyMatrixGraph(int totalNodes, boolean isDirected) {
+    super(totalNodes, isDirected);
+    weightMatrix = new int[totalNodes][totalNodes];
+    edgeExistenceMatrix = new boolean[totalNodes][totalNodes];
   }
 
   @Override
   public void addEdge(int src, int dest) {
-    validateInput(src, dest);
-    adjacencyMatrix[src][dest] = 1;
-    if (!directed) {
-      adjacencyMatrix[dest][src] = 1;
-    }
+    addEdge(src, dest, DEFAULT_WEIGHT);
   }
 
   @Override
   public boolean hasEdge(int src, int dest) {
     validateInput(src, dest);
     if (directed)
-      return adjacencyMatrix[src][dest] == 1;
-    return adjacencyMatrix[src][dest] == 1 && adjacencyMatrix[dest][src] == 1;
+      return edgeExistenceMatrix[src][dest];
+    return edgeExistenceMatrix[src][dest] && edgeExistenceMatrix[dest][src];
   }
 
   @Override
   public void removeEdge(int src, int dest) {
     validateInput(src, dest);
     if (hasEdge(src, dest)) {
-      adjacencyMatrix[src][dest] = 0;
+      edgeExistenceMatrix[src][dest] = false;
       if (!directed) {
-        adjacencyMatrix[dest][src] = 0;
+        edgeExistenceMatrix[dest][src] = false;
       }
     }
   }
 
   @Override
-  public int[] getNeighbourVertices(int vertex) {
+  public int[] getNeighbourNodes(int vertex) {
     if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Invalid Vertex");
     List<Integer> neighbours = new ArrayList<>();
-    for (int i = 0; i < totalVertices; i++) {
-      if (adjacencyMatrix[vertex][i] == 1)
+    for (int i = 0; i < totalNodes; i++) {
+      if (edgeExistenceMatrix[vertex][i])
         neighbours.add(i);
     }
     return neighbours.stream().mapToInt(Integer::intValue).toArray();
@@ -57,8 +52,8 @@ public class AdjacencyMatrixGraph extends AbstractGraph {
   public int[] getInEdges(int vertex) {
     if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Invalid Vertex");
     List<Integer> incomingEdges = new ArrayList<>();
-    for (int i = 0; i < totalVertices; i++) {
-      if (adjacencyMatrix[i][vertex] == 1) {
+    for (int i = 0; i < totalNodes; i++) {
+      if (edgeExistenceMatrix[i][vertex]) {
         incomingEdges.add(i);
       }
     }
@@ -67,6 +62,36 @@ public class AdjacencyMatrixGraph extends AbstractGraph {
 
   @Override
   public int[] getOutEdges(int vertex) {
-    return getNeighbourVertices(vertex);
+    return getNeighbourNodes(vertex);
+  }
+
+  @Override
+  public void addEdge(int src, int dest, int weight) {
+    validateInput(src, dest);
+    weightMatrix[src][dest] = weight;
+    edgeExistenceMatrix[src][dest] = true;
+    if (!directed) {
+      weightMatrix[dest][src] = weight;
+      edgeExistenceMatrix[src][dest] = true;
+    }
+  }
+
+  @Override
+  public List<WeightedEdge> getNeighboursWithWeight(int vertex) {
+    if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Invalid Vertex");
+    List<WeightedEdge> edges = new ArrayList<>();
+    for (int i = 0; i < totalNodes; i++) {
+      if (edgeExistenceMatrix[vertex][i]) {
+        edges.add(new WeightedEdge(vertex, i, weightMatrix[vertex][i]));
+      }
+    }
+    return edges;
+  }
+
+  @Override
+  public WeightedEdge getWeightedEdge(int src, int dest) {
+    if (hasEdge(src, dest))
+        return new WeightedEdge(src, dest, weightMatrix[src][dest]);
+    return null;
   }
 }

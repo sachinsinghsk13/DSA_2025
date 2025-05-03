@@ -26,7 +26,7 @@ public class GraphTraversals {
       Integer vertex = q.poll();
       result[i] = vertex;
       i++;
-      for (int neighbour : g.getNeighbourVertices(vertex)) {
+      for (int neighbour : g.getNeighbourNodes(vertex)) {
         if (visited[neighbour] == WHITE) {
           q.add(neighbour);
           visited[neighbour] = GREY;
@@ -53,7 +53,7 @@ public class GraphTraversals {
       Integer vertex = s.pop();
       result[i] = vertex;
       i++;
-      for (int neighbour : g.getNeighbourVertices(vertex)) {
+      for (int neighbour : g.getNeighbourNodes(vertex)) {
         if (visited[neighbour] == WHITE) {
           s.push(neighbour);
           visited[neighbour] = GREY;
