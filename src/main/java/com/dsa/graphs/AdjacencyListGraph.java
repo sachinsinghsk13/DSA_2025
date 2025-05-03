@@ -2,6 +2,7 @@ package com.dsa.graphs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class AdjacencyListGraph extends AbstractGraph {
   private final List<List<Integer>> adjacencyList = new ArrayList<>();
@@ -49,6 +50,16 @@ public class AdjacencyListGraph extends AbstractGraph {
   public int[] getNeighbourVertices(int vertex) {
     if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Vertex not found in graph.");
     return adjacencyList.get(vertex).stream().mapToInt(Integer::intValue).toArray();
+  }
+
+  @Override
+  public int[] getInEdges(int vertex) {
+    return IntStream.range(0, totalVertices).filter(i -> adjacencyList.get(i).contains(vertex)).toArray();
+  }
+
+  @Override
+  public int[] getOutEdges(int vertex) {
+    return getNeighbourVertices(vertex);
   }
 
 }

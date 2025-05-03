@@ -52,4 +52,21 @@ public class AdjacencyMatrixGraph extends AbstractGraph {
     }
     return neighbours.stream().mapToInt(Integer::intValue).toArray();
   }
+
+  @Override
+  public int[] getInEdges(int vertex) {
+    if (isInvalidVertex(vertex)) throw new IllegalArgumentException("Invalid Vertex");
+    List<Integer> incomingEdges = new ArrayList<>();
+    for (int i = 0; i < totalVertices; i++) {
+      if (adjacencyMatrix[i][vertex] == 1) {
+        incomingEdges.add(i);
+      }
+    }
+    return incomingEdges.stream().mapToInt(Integer::intValue).toArray();
+  }
+
+  @Override
+  public int[] getOutEdges(int vertex) {
+    return getNeighbourVertices(vertex);
+  }
 }

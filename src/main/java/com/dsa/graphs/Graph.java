@@ -7,4 +7,6 @@ public interface Graph {
     void removeEdge(int src, int dest);
     boolean isDirected();
     int[] getNeighbourVertices(int vertex);
+    int[] getInEdges(int vertex);
+    int[] getOutEdges(int vertex);
 }
