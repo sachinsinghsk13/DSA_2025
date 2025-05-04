@@ -1,6 +1,9 @@
 package com.dsa.graphs;
 
-public class WeightedEdge {
+import lombok.Getter;
+
+@Getter
+public class WeightedEdge implements Comparable<WeightedEdge> {
   public int src;
   public int dest;
   public int weight;
@@ -11,15 +14,13 @@ public class WeightedEdge {
     this.weight = weight;
   }
 
-  public int getSrc() {
-    return src;
+  @Override
+  public int compareTo(WeightedEdge o) {
+    return weight - o.weight;
   }
 
-  public int getDest() {
-    return dest;
-  }
-
-  public int getWeight() {
-    return weight;
+  @Override
+  public String toString() {
+    return String.format("%d ---(%d)---> %d", src, weight, dest);
   }
 }

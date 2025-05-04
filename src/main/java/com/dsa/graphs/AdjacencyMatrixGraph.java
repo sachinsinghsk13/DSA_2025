@@ -73,7 +73,7 @@ public class AdjacencyMatrixGraph extends AbstractGraph implements WeightedGraph
     edgeExistenceMatrix[src][dest] = true;
     if (!directed) {
       weightMatrix[dest][src] = weight;
-      edgeExistenceMatrix[src][dest] = true;
+      edgeExistenceMatrix[dest][src] = true;
     }
   }
 
