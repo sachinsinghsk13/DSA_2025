@@ -1,26 +1,17 @@
 package com.dsa;
 
-import com.dsa.graphs.AdjacencyListGraph;
-import com.dsa.graphs.AdjacencyMatrixGraph;
-import com.dsa.graphs.DisjointSet;
-import com.dsa.graphs.WeightedGraph;
-import com.dsa.graphs.algorithms.MinimumSpanningTree;
-import java.util.Arrays;
+import com.dsa.brute.force.knapsack.KnapsackProblem;
+import com.dsa.brute.force.npuzzle.Board;
+import com.dsa.brute.force.npuzzle.XPuzzleProblem;
+import java.util.List;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class Driver {
-
   public static void main(String[] args) {
-    WeightedGraph g = new AdjacencyListGraph(6, false);
-    g.addEdge(0, 1, 7);
-    g.addEdge(0, 2, 6);
-    g.addEdge(0, 3, 1);
-    g.addEdge(1, 2, 8);
-    g.addEdge(2, 3, 5);
-    g.addEdge(2, 4, 3);
-    g.addEdge(3, 5, 5);
-    g.addEdge(4, 5, 2);
-    g.addEdge(4, 3, 4);
-    MinimumSpanningTree.kruskalsMST(g).forEach(System.out::println);
+    int[] weight = new int[]{2, 1, 3, 2, 5};
+    int[] profit = new int[]{12, 10, 20, 15, 25};
+    int max = KnapsackProblem.knapsack(weight, profit, 10);
+    System.out.println("Max profit is " + max);
   }
 }
 
