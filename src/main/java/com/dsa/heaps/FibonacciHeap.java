@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 public class FibonacciHeap {
   private FibonacciNode min;
   private int n = 0;
-  private Map<Integer, FibonacciNode> nodeLocator = new HashMap<>();
+  private final Map<Integer, FibonacciNode> nodeLocator = new HashMap<>();
 
   // O(1)
   public void insert(int key) {
