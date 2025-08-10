@@ -1,49 +1,44 @@
 package com.dsa.dynamic.programming;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class LongestCommonSubSequence {
 
   public static void main(String[] args) {
-    String s1 = "ABCBDAB";
-    String s2 =  "BDCAB";
+    String x = "AGCTAGCTAGCTAGCTAGCTA";
+    String y = "GCTAGCTAGCTAGCTAGCTAG";
 
-    List<String> subsequences1 = generateSubSequence(s1);
-    List<String> subsequences2 = generateSubSequence(s2);
-    System.out.println(subsequences1);
-    System.out.println(subsequences2);
-    int maxLength = 0;
+    int i = x.length() - 1;
+    int j = y.length() - 1;
 
-    for (String ss1 : subsequences1) {
-      for (String ss2 : subsequences2) {
-        if (ss1.equals(ss2) && ss2.length() > maxLength) {
-          maxLength = ss1.length();
-        }
-      }
+    int[][] dp = new int[x.length()][y.length()];
+    for (int[] row : dp) {
+      Arrays.fill(row, -1);
     }
 
-    System.out.println("Longest Common Subsequence Length is : " + maxLength);
-
+    int result = solve(x, y, i, j, dp);
+    System.out.println("Result : " + result);
   }
 
-  private static List<String> generateSubSequence(String str) {
-    List<String> result = new ArrayList<>();
-    util(str, 0, "", result);
+  private static int solve(String x, String y, int i, int j, int[][] dp) {
+    if (i < 0 || j < 0) {
+      return 0;
+    }
+
+    if (dp[i][j] != -1) {
+      return dp[i][j];
+    }
+
+    int result;
+    // match
+    if (x.charAt(i) == y.charAt(j)) {
+      result = 1 + solve(x, y, i - 1, j - 1, dp);
+    } else {
+      // Not Match
+      result = Math.max(solve(x, y, i - 1, j, dp), solve(x, y, i, j - 1, dp));
+    }
+    dp[i][j] = result;
     return result;
-  }
-
-  static void util(String str, int index, String subsequence, List<String> result) {
-    if (index == str.length()) {
-      result.add(subsequence);
-      return;
-    }
-
-    // pick
-    util(str, index + 1,  subsequence + str.charAt(index), result);
-
-    // not pick
-    util(str, index + 1, subsequence, result);
   }
 
 
